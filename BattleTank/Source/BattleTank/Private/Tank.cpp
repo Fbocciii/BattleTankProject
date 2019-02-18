@@ -1,7 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Tank.h"
-
+//#include "Tank.h"
+#include "Public/Tank.h"
+#include "Public/TankAimingComponent.h"
+#include "Public/TankBarrel.h"
 
 // Sets default values
 ATank::ATank()
@@ -9,6 +11,22 @@ ATank::ATank()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>("Aiming Component");
+}
+
+void ATank::AimAt(const FVector & HitLocation)
+{
+	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
+	//FString OurTankName = GetName();
+
+	//UE_LOG(LogTemp, Warning, TEXT("%s aiming at: %s"), *OurTankName, *HitLocation.ToString());
+
+
+}
+
+void ATank::SetBarrelReference(UTankBarrel * BarrelToSet)
+{
+	TankAimingComponent->SetBarrelReference(BarrelToSet);
 }
 
 // Called when the game starts or when spawned
