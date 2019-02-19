@@ -33,8 +33,15 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Firing)
 	float LaunchSpeed = 10000.0f;
 
+	UPROPERTY(EditAnywhere, Category = Firing)
+	float ReloadTime = 3.0f;
+
+	double LastFireTime = 0.0;
+
 	UPROPERTY(EditAnywhere, Category = Setup)
 	TSubclassOf<AProjectile> ProjectileBlueprint; //Alternative TSubclassOf<T>
+
+	
 
 public:
 	// Sets default values for this pawn's properties
