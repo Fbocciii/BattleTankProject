@@ -33,12 +33,11 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector & Hit)
 	GetViewportSize(ViewportX, ViewportY);
 	ScreenLocation.Set(ViewportX * CrossHairXLocation, ViewportY * CrossHairYLocation);
 
-	//UE_LOG(LogTemp, Warning, TEXT("Screen Loc: %s"), *ScreenLocation.ToString());
 	FVector CamLocation;
 	FVector CamDirection;
 	DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CamLocation, CamDirection);
-	//UE_LOG(LogTemp, Warning, TEXT("View direction: %s"), *CamDirection.ToString());
-	//FVector HitLocation(0.0);
+
+
 	if(GetLookVectorHitLocation(CamDirection, Hit))
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *HitLocation.ToString());
@@ -59,10 +58,16 @@ bool ATankPlayerController::GetLookVectorHitLocation(const FVector& LookDirectio
 	auto StartLocation = PlayerCameraManager->GetCameraLocation();
 	auto EndLocation = StartLocation + (LookDirection * LineTraceRange);
 
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(GetControlledTank());
+	//const FName TraceTag("TraceTag");
+	//GetWorld()->DebugDrawTraceTag = TraceTag;
+	//CollisionParams.TraceTag = TraceTag;
 	bool hit = GetWorld()->LineTraceSingleByChannel(Result,
 													StartLocation,
 													EndLocation,
-													ECollisionChannel::ECC_Visibility);
+													ECollisionChannel::ECC_Visibility,
+													CollisionParams);
 	if (hit)
 	{
 		HitLocation = Result.Location;
