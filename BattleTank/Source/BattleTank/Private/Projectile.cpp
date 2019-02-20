@@ -10,7 +10,7 @@ AProjectile::AProjectile()
 	PrimaryActorTick.bCanEverTick = true;
 
 	//Creating and setting some variables
-	MovementComponent = CreateAbstractDefaultSubobject<UProjectileMovementComponent>("Movement Component");
+	MovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("Movement Component");
 	MovementComponent->bAutoActivate = false;
 
 }
