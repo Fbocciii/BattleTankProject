@@ -50,14 +50,6 @@ void UTankAimingComponent::MoveBarrelTowards(const FVector AimDirection)
 
 
 
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
 void UTankAimingComponent::AimAt(const FVector & HitLocation, float LaunchSpeed)
 {
 
@@ -99,12 +91,13 @@ void UTankAimingComponent::AimAt(const FVector & HitLocation, float LaunchSpeed)
 
 }
 
-void UTankAimingComponent::SetBarrelReference(UTankBarrel * BarrelToSet)
+void UTankAimingComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet)
 {
+	Turret = TurretToSet;
 	Barrel = BarrelToSet;
 }
 
-void UTankAimingComponent::SetTurretReference(UTankTurret * TurretToSet)
+const UTankBarrel * UTankAimingComponent::GetBarrel() const
 {
-	Turret = TurretToSet;
+	return Barrel;
 }

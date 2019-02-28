@@ -6,6 +6,16 @@
 #include "Components/ActorComponent.h"
 #include "TankAimingComponent.generated.h"
 
+
+UENUM()
+enum class EFiringStatus : uint8
+{
+	Locked,
+	Aiming,
+	Reloading
+};
+
+
 class UTankBarrel;
 class UTankTurret;
 
@@ -24,16 +34,17 @@ protected:
 
 	void MoveBarrelTowards(const FVector AimDirection);
 
-
+	UPROPERTY(BlueprintReadOnly, Category = "State")
+	EFiringStatus FiringStatus = EFiringStatus::Aiming;
 public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
 	void AimAt(const FVector& HitLocation, float LaunchSpeed);
 	
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
 
-	void SetTurretReference(UTankTurret* TurretToSet);
+
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
+
+	const UTankBarrel* GetBarrel() const;
 
 private:
 	AActor* Owner;
@@ -41,4 +52,6 @@ private:
 	UTankBarrel* Barrel;
 
 	UTankTurret* Turret;
+
+	
 };

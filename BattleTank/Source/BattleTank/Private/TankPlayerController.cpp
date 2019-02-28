@@ -86,5 +86,9 @@ void ATankPlayerController::Tick(float DeltaTime)
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
+	auto AimingComp = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	if (AimingComp)
+	{
+		FoundAimingComponent(AimingComp);
+	}
 }

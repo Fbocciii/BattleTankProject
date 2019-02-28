@@ -19,8 +19,6 @@ class BATTLETANK_API ATank : public APawn
 
 
 protected:
-	UTankBarrel* Barrel = nullptr;
-
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -30,6 +28,7 @@ protected:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(BlueprintReadOnly)
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
 	UPROPERTY(BlueprintReadOnly)
@@ -54,11 +53,6 @@ public:
 	
 	void AimAt(const FVector& HitLocation);
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
-
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetTurretReference(UTankTurret* TurretToSet);
 
 	UFUNCTION(BlueprintCallable, Category = Runtime)
 	void Fire();

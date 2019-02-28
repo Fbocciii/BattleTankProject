@@ -50,7 +50,3 @@ void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, boo
 	IntendTurnRight(TurnThrow);
 }
 
-UTankMovementComponent::UTankMovementComponent()
-{
-	
-}

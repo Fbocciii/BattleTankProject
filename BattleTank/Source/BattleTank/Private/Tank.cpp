@@ -14,7 +14,7 @@ ATank::ATank()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>("Aiming Component");
+	//TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>("Aiming Component");
 
 	//TankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>("Movement Component");
 	
@@ -22,7 +22,10 @@ ATank::ATank()
 
 void ATank::AimAt(const FVector & HitLocation)
 {
-	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
+	if (TankAimingComponent)
+		TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
+	else
+		UE_LOG(LogTemp, Warning, TEXT("Aim At malfunction!"));
 	//FString OurTankName = GetName();
 
 	//UE_LOG(LogTemp, Warning, TEXT("%s aiming at: %s"), *OurTankName, *HitLocation.ToString());
@@ -30,27 +33,20 @@ void ATank::AimAt(const FVector & HitLocation)
 
 }
 
-void ATank::SetBarrelReference(UTankBarrel * BarrelToSet)
-{
-	TankAimingComponent->SetBarrelReference(BarrelToSet);
-	Barrel = BarrelToSet;
-}
-
-void ATank::SetTurretReference(UTankTurret * TurretToSet)
-{
-	TankAimingComponent->SetTurretReference(TurretToSet);
-}
-
 void ATank::Fire()
 {
 	bool IsReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTime;
-	if(Barrel && IsReloaded)
+	if(TankAimingComponent && TankAimingComponent->GetBarrel() && IsReloaded)
 	{
 		AProjectile* SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,
-											Barrel->GetSocketLocation(FName("Projectile")),
-											Barrel->GetSocketRotation(FName("Projectile")));
+											TankAimingComponent->GetBarrel()->GetSocketLocation(FName("Projectile")),
+											TankAimingComponent->GetBarrel()->GetSocketRotation(FName("Projectile")));
 		SpawnedProjectile->LaunchProjectile(LaunchSpeed);
 		LastFireTime = GetWorld()->GetTimeSeconds();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Fire malfunction!"));
 	}
 }
 
