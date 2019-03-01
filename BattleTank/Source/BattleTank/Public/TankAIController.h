@@ -7,7 +7,8 @@
 #include "TankAIController.generated.h"
 
 
-class ATank;
+class UTankAimingComponent;
+
 /**
  * 
  */
@@ -17,12 +18,16 @@ class BATTLETANK_API ATankAIController : public AAIController
 	GENERATED_BODY()
 	
 private:
-	ATank* CurrentTank;
+
+	APawn* CurrentTank;
 	
-	ATank* PlayerTank;
+	APawn* PlayerTank;
 
 	virtual void BeginPlay() override;
 	
 	virtual void  Tick(float DeltaTime) override;
 
+protected:
+	UPROPERTY(BlueprintReadOnly)
+	UTankAimingComponent* TankAimingComponent = nullptr;
 };

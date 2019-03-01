@@ -7,8 +7,6 @@
 #include "Tank.generated.h"
 
 
-class UTankAimingComponent;
-class UTankBarrel;
 class AProjectile;
 
 UCLASS()
@@ -27,9 +25,7 @@ protected:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(BlueprintReadOnly)
-	UTankAimingComponent* TankAimingComponent = nullptr;
-
+	//TODO remove
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float LaunchSpeed = 10000.0f;
 
@@ -46,10 +42,8 @@ protected:
 public:
 	// Sets default values for this pawn's properties
 	ATank();
-	
-	void AimAt(const FVector& HitLocation);
 
-
+	//TODO move to aiming comp and remove!
 	UFUNCTION(BlueprintCallable, Category = Runtime)
 	void Fire();
 };

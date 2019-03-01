@@ -1,19 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankPlayerController.h"
-#include "Public/Tank.h"
 #include "Engine/World.h"
 #include "Public/TankAimingComponent.h"
 
-ATank* ATankPlayerController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
+
 
 void ATankPlayerController::AimTowardCrosshair()
 {
-	ATank* CurTank = GetControlledTank();
-	if (!ensure(CurTank))
+	TankAimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(TankAimingComponent))
 	{
 		return;
 	}
@@ -23,7 +19,7 @@ void ATankPlayerController::AimTowardCrosshair()
 
 	GetSightRayHitLocation(HitLocation);
 	
-	CurTank->AimAt(HitLocation);
+	TankAimingComponent->AimAt(HitLocation);
 }
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector & Hit) 
@@ -59,7 +55,7 @@ bool ATankPlayerController::GetLookVectorHitLocation(const FVector& LookDirectio
 	auto EndLocation = StartLocation + (LookDirection * LineTraceRange);
 
 	FCollisionQueryParams CollisionParams;
-	CollisionParams.AddIgnoredActor(GetControlledTank());
+	CollisionParams.AddIgnoredActor(GetPawn());
 	//const FName TraceTag("TraceTag");
 	//GetWorld()->DebugDrawTraceTag = TraceTag;
 	//CollisionParams.TraceTag = TraceTag;
@@ -86,7 +82,7 @@ void ATankPlayerController::Tick(float DeltaTime)
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	auto AimingComp = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	auto AimingComp = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	if (ensure(AimingComp))
 	{
 		FoundAimingComponent(AimingComp);

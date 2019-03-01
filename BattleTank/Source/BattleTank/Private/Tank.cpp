@@ -2,8 +2,6 @@
 
 //#include "Tank.h"
 #include "Public/Tank.h"
-#include "Public/TankAimingComponent.h"
-#include "Public/TankBarrel.h"
 #include "Engine/World.h"
 #include "Public/Projectile.h"
 
@@ -15,42 +13,29 @@ ATank::ATank()
 
 }
 
-void ATank::AimAt(const FVector & HitLocation)
-{
-	if (ensure(TankAimingComponent))
-		TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
-	else
-		UE_LOG(LogTemp, Warning, TEXT("Aim At malfunction!"));
-	//FString OurTankName = GetName();
-
-	//UE_LOG(LogTemp, Warning, TEXT("%s aiming at: %s"), *OurTankName, *HitLocation.ToString());
-
-
-}
 
 void ATank::Fire()
 {
-	bool IsReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTime;
-	if(ensure(TankAimingComponent) && ensure(TankAimingComponent->GetBarrel()) && IsReloaded)
-	{
-		AProjectile* SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,
-											TankAimingComponent->GetBarrel()->GetSocketLocation(FName("Projectile")),
-											TankAimingComponent->GetBarrel()->GetSocketRotation(FName("Projectile")));
-		SpawnedProjectile->LaunchProjectile(LaunchSpeed);
-		LastFireTime = GetWorld()->GetTimeSeconds();
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Fire malfunction!"));
-	}
+	//bool IsReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTime;
+	//if(ensure(TankAimingComponent) && ensure(TankAimingComponent->GetBarrel()) && IsReloaded)
+	//{
+	//	AProjectile* SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,
+	//										TankAimingComponent->GetBarrel()->GetSocketLocation(FName("Projectile")),
+	//										TankAimingComponent->GetBarrel()->GetSocketRotation(FName("Projectile")));
+	//	SpawnedProjectile->LaunchProjectile(LaunchSpeed);
+	//	LastFireTime = GetWorld()->GetTimeSeconds();
+	//}
+	//else
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("Fire malfunction!"));
+	//}
 }
 
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
+
 }
 
 // Called every frame

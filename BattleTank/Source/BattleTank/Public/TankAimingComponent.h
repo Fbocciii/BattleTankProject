@@ -36,8 +36,12 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EFiringStatus FiringStatus = EFiringStatus::Aiming;
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float LaunchSpeed = 10000.0f;
+
 public:	
-	void AimAt(const FVector& HitLocation, float LaunchSpeed);
+	void AimAt(const FVector& HitLocation);
 	
 
 
