@@ -30,6 +30,10 @@ void UTankAimingComponent::BeginPlay()
 
 void UTankAimingComponent::MoveBarrelTowards(const FVector AimDirection)
 {
+	if (!ensure(Barrel && Turret))
+	{
+		return;
+	}
 	auto BarrelRotation = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotation;
