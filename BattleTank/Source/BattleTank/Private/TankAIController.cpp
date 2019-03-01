@@ -19,7 +19,7 @@ void ATankAIController::Tick(float DeltaTime)
 
 	if (CurrentTank)
 	{
-		if (PlayerTank)
+		if (ensure(PlayerTank))
 		{
 			MoveToActor(PlayerTank, 100.0f);
 

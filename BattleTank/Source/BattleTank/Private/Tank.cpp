@@ -6,7 +6,6 @@
 #include "Public/TankBarrel.h"
 #include "Engine/World.h"
 #include "Public/Projectile.h"
-#include "Public/TankMovementComponent.h"
 
 // Sets default values
 ATank::ATank()
@@ -22,7 +21,7 @@ ATank::ATank()
 
 void ATank::AimAt(const FVector & HitLocation)
 {
-	if (TankAimingComponent)
+	if (ensure(TankAimingComponent))
 		TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 	else
 		UE_LOG(LogTemp, Warning, TEXT("Aim At malfunction!"));
@@ -36,7 +35,7 @@ void ATank::AimAt(const FVector & HitLocation)
 void ATank::Fire()
 {
 	bool IsReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTime;
-	if(TankAimingComponent && TankAimingComponent->GetBarrel() && IsReloaded)
+	if(ensure(TankAimingComponent) && ensure(TankAimingComponent->GetBarrel()) && IsReloaded)
 	{
 		AProjectile* SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,
 											TankAimingComponent->GetBarrel()->GetSocketLocation(FName("Projectile")),

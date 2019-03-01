@@ -5,7 +5,7 @@
 
 void UTankMovementComponent::IntendMoveForward(float Throw)
 {
-	if (!LeftTrack || !RightTrack)
+	if (!ensure(LeftTrack && RightTrack))
 	{
 		UE_LOG(LogTemp, Error, TEXT("Missing Track(s) in Movement component!"));
 		return;
@@ -17,7 +17,7 @@ void UTankMovementComponent::IntendMoveForward(float Throw)
 
 void UTankMovementComponent::IntendTurnRight(float Throw)
 {
-	if (!LeftTrack || !RightTrack)
+	if (!ensure(LeftTrack && RightTrack))
 	{
 		UE_LOG(LogTemp, Error, TEXT("Missing Track(s) in Movement component!"));
 		return;
@@ -28,7 +28,7 @@ void UTankMovementComponent::IntendTurnRight(float Throw)
 }
 void UTankMovementComponent::Initialize(UTankTrack * LeftTrackToSet, UTankTrack * RightTrackToSet)
 {
-	if (!LeftTrackToSet || !RightTrackToSet)
+	if (!ensure(LeftTrackToSet && RightTrackToSet))
 	{
 		UE_LOG(LogTemp, Error, TEXT("Missing Track(s) in Movement component!"));
 	}
