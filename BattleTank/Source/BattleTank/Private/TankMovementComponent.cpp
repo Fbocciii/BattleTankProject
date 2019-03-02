@@ -10,6 +10,8 @@ void UTankMovementComponent::IntendMoveForward(float Throw)
 		UE_LOG(LogTemp, Error, TEXT("Missing Track(s) in Movement component!"));
 		return;
 	}
+	//UE_LOG(LogTemp, Warning, TEXT("Move forward throw: %f"), Throw);
+
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
 

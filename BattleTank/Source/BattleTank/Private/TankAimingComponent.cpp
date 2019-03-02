@@ -6,16 +6,20 @@
 #include "Kismet/GameplayStatics.h"
 #include "Public/TankBarrel.h"
 #include "Public/TankTurret.h"
+#include "Public/Projectile.h"
+
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;// true;
+	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
 	Owner = GetOwner();
+
+
 }
 
 
@@ -26,6 +30,22 @@ void UTankAimingComponent::BeginPlay()
 
 	// ...
 	
+}
+
+void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+{
+	if ((GetWorld()->GetTimeSeconds() - LastFireTime) < ReloadTime)
+	{
+		FiringStatus = EFiringStatus::Reloading;
+	}
+	else if (IsBarrelMoving())
+	{
+		FiringStatus = EFiringStatus::Aiming;
+	}
+	else
+	{
+		FiringStatus = EFiringStatus::Locked;
+	}
 }
 
 void UTankAimingComponent::MoveBarrelTowards(const FVector AimDirection)
@@ -53,6 +73,15 @@ void UTankAimingComponent::MoveBarrelTowards(const FVector AimDirection)
 
 
 
+bool UTankAimingComponent::IsBarrelMoving()
+{
+	if (!ensure(Barrel))
+		return false;
+
+	return !AimDirection.Equals(Barrel->GetForwardVector(), 0.01f);
+
+}
+
 void UTankAimingComponent::AimAt(const FVector & HitLocation)
 {
 
@@ -76,9 +105,23 @@ void UTankAimingComponent::AimAt(const FVector & HitLocation)
 	if(HaveAimSolution)
 	{
 		FString OurTankName = Owner->GetName();
-		FVector AimDirection = LaunchVelocity.GetSafeNormal();
+		AimDirection = LaunchVelocity.GetSafeNormal();
 
 		MoveBarrelTowards(AimDirection);
+	}
+
+}
+
+void UTankAimingComponent::Fire()
+{
+	if (FiringStatus != EFiringStatus::Reloading)
+	{
+		AProjectile* SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,
+																			 Barrel->GetSocketLocation(FName("Projectile")),
+																			 Barrel->GetSocketRotation(FName("Projectile")));
+		SpawnedProjectile->LaunchProjectile(LaunchSpeed);
+		LastFireTime = GetWorld()->GetTimeSeconds();
+		FiringStatus = EFiringStatus::Reloading;
 	}
 
 }

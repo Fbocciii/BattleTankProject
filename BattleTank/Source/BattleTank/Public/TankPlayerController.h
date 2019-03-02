@@ -11,7 +11,6 @@
  */
 
 
-class ATank;
 class UTankAimingComponent;
 
 UCLASS()

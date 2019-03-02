@@ -1,9 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-//#include "Tank.h"
+
 #include "Public/Tank.h"
-#include "Engine/World.h"
-#include "Public/Projectile.h"
 
 // Sets default values
 ATank::ATank()
@@ -13,23 +11,6 @@ ATank::ATank()
 
 }
 
-
-void ATank::Fire()
-{
-	//bool IsReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTime;
-	//if(ensure(TankAimingComponent) && ensure(TankAimingComponent->GetBarrel()) && IsReloaded)
-	//{
-	//	AProjectile* SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,
-	//										TankAimingComponent->GetBarrel()->GetSocketLocation(FName("Projectile")),
-	//										TankAimingComponent->GetBarrel()->GetSocketRotation(FName("Projectile")));
-	//	SpawnedProjectile->LaunchProjectile(LaunchSpeed);
-	//	LastFireTime = GetWorld()->GetTimeSeconds();
-	//}
-	//else
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("Fire malfunction!"));
-	//}
-}
 
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
