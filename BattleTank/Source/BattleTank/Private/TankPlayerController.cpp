@@ -18,10 +18,11 @@ void ATankPlayerController::AimTowardCrosshair()
 
 	
 	FVector HitLocation(-1.0f);
-
-	GetSightRayHitLocation(HitLocation);
 	
-	TankAimingComponent->AimAt(HitLocation);
+	if (GetSightRayHitLocation(HitLocation))
+	{
+		TankAimingComponent->AimAt(HitLocation);
+	}
 }
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector & Hit) 
@@ -33,9 +34,16 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector & Hit)
 
 	FVector CamLocation;
 	FVector CamDirection;
-	DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CamLocation, CamDirection);
+	if (DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CamLocation, CamDirection))
+	{
+		return GetLookVectorHitLocation(CamDirection, Hit);
+	}
 
 
+	return false;
+
+
+	//Not needed
 	if(GetLookVectorHitLocation(CamDirection, Hit))
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *HitLocation.ToString());
@@ -43,7 +51,7 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector & Hit)
 	}
 
 	//Hit = HitLocation;
-	return true;
+	return false;
 }
 
 bool ATankPlayerController::GetLookVectorHitLocation(const FVector& LookDirection, FVector& HitLocation)
