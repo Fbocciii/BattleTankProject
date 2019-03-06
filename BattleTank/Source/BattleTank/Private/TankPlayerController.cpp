@@ -39,18 +39,6 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector & Hit)
 		return GetLookVectorHitLocation(CamDirection, Hit);
 	}
 
-
-	return false;
-
-
-	//Not needed
-	if(GetLookVectorHitLocation(CamDirection, Hit))
-	{
-		//UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *HitLocation.ToString());
-		
-	}
-
-	//Hit = HitLocation;
 	return false;
 }
 

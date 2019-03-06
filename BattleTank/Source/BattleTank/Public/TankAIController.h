@@ -27,6 +27,9 @@ private:
 	
 	virtual void  Tick(float DeltaTime) override;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float AcceptanceRadius = 2000.0f;
+
 protected:
 	UPROPERTY(BlueprintReadOnly)
 	UTankAimingComponent* TankAimingComponent = nullptr;

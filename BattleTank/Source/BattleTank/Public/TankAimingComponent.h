@@ -66,6 +66,7 @@ public:
 
 	const UTankBarrel* GetBarrel() const;
 
+	EFiringStatus GetFiringState() const { return FiringStatus; }
 private:
 	AActor* Owner;
 
