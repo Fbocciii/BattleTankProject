@@ -19,13 +19,15 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 	Owner = GetOwner();
 
-
+	CurrentAmmo = AmmoCapacity;
 }
 
 
 // Called when the game starts
 void UTankAimingComponent::BeginPlay()
 {
+	LastFireTime = GetWorld()->GetTimeSeconds();
+
 	Super::BeginPlay();
 
 	// ...
@@ -34,7 +36,11 @@ void UTankAimingComponent::BeginPlay()
 
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
-	if ((GetWorld()->GetTimeSeconds() - LastFireTime) < ReloadTime)
+	if (CurrentAmmo <= 0)
+	{
+		FiringStatus = EFiringStatus::Empty;
+	}
+	else if ((GetWorld()->GetTimeSeconds() - LastFireTime) < ReloadTime)
 	{
 		FiringStatus = EFiringStatus::Reloading;
 	}
@@ -114,7 +120,7 @@ void UTankAimingComponent::AimAt(const FVector & HitLocation)
 
 void UTankAimingComponent::Fire()
 {
-	if (FiringStatus != EFiringStatus::Reloading)
+	if (FiringStatus != EFiringStatus::Reloading && FiringStatus != EFiringStatus::Empty)
 	{
 		AProjectile* SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,
 																			 Barrel->GetSocketLocation(FName("Projectile")),
@@ -122,6 +128,7 @@ void UTankAimingComponent::Fire()
 		SpawnedProjectile->LaunchProjectile(LaunchSpeed);
 		LastFireTime = GetWorld()->GetTimeSeconds();
 		FiringStatus = EFiringStatus::Reloading;
+		--CurrentAmmo;
 	}
 
 }

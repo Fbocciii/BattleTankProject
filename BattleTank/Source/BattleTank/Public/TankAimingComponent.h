@@ -12,7 +12,8 @@ enum class EFiringStatus : uint8
 {
 	Locked,
 	Aiming,
-	Reloading
+	Reloading,
+	Empty
 };
 
 
@@ -55,6 +56,11 @@ protected:
 
 	FVector AimDirection;
 
+	UPROPERTY(EditAnywhere, Category = "Firing")
+	int32 AmmoCapacity = 3;
+
+	int32 CurrentAmmo = 0;
+
 public:	
 	void AimAt(const FVector& HitLocation);
 	
@@ -67,6 +73,10 @@ public:
 	const UTankBarrel* GetBarrel() const;
 
 	EFiringStatus GetFiringState() const { return FiringStatus; }
+
+	UFUNCTION(BlueprintCallable, Category = "Runtime")
+	int32 GetCurrentAmmo() const { return CurrentAmmo; }
+
 private:
 	AActor* Owner;
 
