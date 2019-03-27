@@ -19,7 +19,7 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 	Owner = GetOwner();
 
-	CurrentAmmo = AmmoCapacity;
+	
 }
 
 
@@ -27,7 +27,7 @@ UTankAimingComponent::UTankAimingComponent()
 void UTankAimingComponent::BeginPlay()
 {
 	LastFireTime = GetWorld()->GetTimeSeconds();
-
+	CurrentAmmo = AmmoCapacity;
 	Super::BeginPlay();
 
 	// ...

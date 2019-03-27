@@ -45,6 +45,11 @@ private:
 
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void OnDeath();
+
+	virtual void SetPawn(APawn* InPawn) override;
+
 protected:
 	UPROPERTY(BlueprintReadOnly)
 	UTankAimingComponent* TankAimingComponent = nullptr;

@@ -3,7 +3,7 @@
 #include "Public/TankAIController.h"
 #include "Engine/World.h"
 #include "Public/TankAimingComponent.h"
-
+#include "Tank.h"
 
 void ATankAIController::BeginPlay()
 {
@@ -26,7 +26,7 @@ void ATankAIController::Tick(float DeltaTime)
 		{
 			MoveToActor(PlayerTank, AcceptanceRadius);
 
-			TankAimingComponent->AimAt(PlayerTank->GetTargetLocation());
+			TankAimingComponent->AimAt(PlayerTank->GetTargetLocation() + FVector(0, 0, 100.0f));
 
 			if(TankAimingComponent->GetFiringState() == EFiringStatus::Locked)
 				TankAimingComponent->Fire();
@@ -40,5 +40,27 @@ void ATankAIController::Tick(float DeltaTime)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s has no tank attached!"), *GetName());
 	}
+}
+
+void ATankAIController::SetPawn(APawn * InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	if (InPawn)
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!(ensure(PossessedTank)))
+		{
+			return;
+		}
+
+		PossessedTank->OnTankDeath.AddUniqueDynamic(this, &ATankAIController::OnDeath);
+	}
+}
+
+void ATankAIController::OnDeath()
+{
+	
+	CurrentTank->DetachFromControllerPendingDestroy();
 }
 

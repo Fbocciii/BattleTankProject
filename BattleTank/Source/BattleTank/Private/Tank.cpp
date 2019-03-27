@@ -9,6 +9,19 @@ ATank::ATank()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	
+}
+
+float ATank::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
+{
+	DamageAmount = (DamageAmount > CurrentHealth ? CurrentHealth : DamageAmount);
+
+	CurrentHealth -= DamageAmount;
+	if (CurrentHealth <= 0.0f)
+	{
+		OnTankDeath.Broadcast();
+	}
+	return DamageAmount;
 }
 
 
@@ -16,6 +29,8 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
+
+	CurrentHealth = MaxHealth;
 
 }
 

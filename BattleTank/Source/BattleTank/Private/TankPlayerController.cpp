@@ -3,7 +3,7 @@
 #include "TankPlayerController.h"
 #include "Engine/World.h"
 #include "Public/TankAimingComponent.h"
-
+#include "Tank.h"
 
 
 void ATankPlayerController::AimTowardCrosshair()
@@ -60,7 +60,7 @@ bool ATankPlayerController::GetLookVectorHitLocation(const FVector& LookDirectio
 	bool hit = GetWorld()->LineTraceSingleByChannel(Result,
 													StartLocation,
 													EndLocation,
-													ECollisionChannel::ECC_Visibility,
+													ECollisionChannel::ECC_Camera,
 													CollisionParams);
 	if (hit)
 	{
@@ -84,5 +84,27 @@ void ATankPlayerController::BeginPlay()
 	if (ensure(AimingComp))
 	{
 		FoundAimingComponent(AimingComp);
+	}
+	//Cast<ATank>(GetPawn())->OnTankDeath.AddUniqueDynamic(this, &ATankPlayerController::OnDeath);
+}
+
+void ATankPlayerController::OnDeath()
+{
+	StartSpectatingOnly();
+}
+
+void ATankPlayerController::SetPawn(APawn * InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	if (InPawn)
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!(ensure(PossessedTank)))
+		{
+			return;
+		}
+
+		PossessedTank->OnTankDeath.AddUniqueDynamic(this, &ATankPlayerController::OnDeath);
 	}
 }
